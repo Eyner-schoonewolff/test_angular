@@ -25,6 +25,8 @@
               "src/assets"
             ],
             "styles": [
+              "./node_modules/ngx-bootstrap/datepicker/bs-datepicker.css",
+              "./node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/styles.css"
             ],
             "scripts": []
@@ -87,12 +89,21 @@
               "src/assets"
             ],
             "styles": [
+              "node-modules/bootstrap/dist/css/bootstrap.min.css",
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+              "node-modules/jquery/dist/jquery.min.js",
+              "node-modules/-popperjs/core/dist/umd/popper.min.js",
+              "node-modules/bootstrap/dist/js/bootstrap.min.js"
+            ]
           }
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "3926fe6c-f7c8-4801-b657-384f91f3e046"
   }
 }
