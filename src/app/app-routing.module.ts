@@ -4,7 +4,7 @@ import { Error404Component } from './shared/pages/error404/error404.component';
 
 const routes: Routes = [
   {
-    path: 'auth',
+    path: 'app',
     loadChildren: () => import('./components/auth.module').then(m => m.AuthModule),
   },
   {
@@ -13,7 +13,7 @@ const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'auth',
+    redirectTo: 'app/login',
     pathMatch: 'full'
   },
   {

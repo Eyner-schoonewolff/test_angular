@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>Actualizar Usuario</title>
+  <title>Actualizar Notificaciones</title>
 
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
@@ -19,7 +19,7 @@
   <div class="collapse navbar-collapse" id="navbarNavDropdown">
     <ul class="navbar-nav">
       <li class="nav-item active">
-        <a routerLink="/auth/home" class="nav-link">Home</a>
+        <a routerLink="/app/notificacion" class="nav-link">Bienvenido</a>
       </li>
     </ul>
 
@@ -32,9 +32,9 @@
   <div class="container">
     <div class="row justify-content-center">
       <div class="col-md-6">
-        <h2 class="mb-4 text-center">Actualizar Usuario</h2>
+        <h2 class="mb-4 text-center">Actualizar Notificaciones</h2>
 
-        <form (ngSubmit)="onSubmit(usuario)" #form="ngForm">
+        <!-- <form (ngSubmit)="onSubmit(usuario)" #form="ngForm">
           <div class="form-group">
             <label for="nombre">Nombre</label>
             <input [(ngModel)]="usuario.nombre" type="text" class="form-control" name="nombre" required
@@ -60,7 +60,7 @@
 
 
           <button type="submit" class="btn btn-primary btn-block">Actualizar Usuario</button>
-        </form>
+        </form> -->
       </div>
     </div>
   </div>

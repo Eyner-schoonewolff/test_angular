@@ -11,6 +11,5 @@ export class AppComponent implements OnInit {
   result: any;
   constructor(private server:ServerService){}
   ngOnInit(): void {
-    console.log('hola')
   }
 }

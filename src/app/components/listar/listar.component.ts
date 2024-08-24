@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ServerService } from 'src/app/services/server.service';
-import { Usuario } from '../interfaces/usuario';
+import { Notification, StatusNotification } from '../listar/interfaces/notificacion';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 
@@ -11,36 +11,29 @@ import Swal from 'sweetalert2';
   styleUrls: ['./listar.component.css']
 })
 export class ListarComponent {
-  usuario: Usuario = {
-    id: 0,
-    nombre: '',
-    cedula: 0,
-    departamento: '',
-    descripcion: '',
-    estado: ''
-  }
-  usuarios: Usuario[] = [];
+  notificaciones: Notification[] = [];
 
   constructor(private servicio: ServerService, private router: Router) { }
 
+  getBackgroundColor(status: number): string {
+    return status === 1 ? '#4CAF50' : '#F44336';
+  }
   ngOnInit() {
-    this.servicio.Obtener_usuarios().subscribe(
+
+    this.servicio.Obtener_notificaciones().subscribe(
       (data: any) => {
-        this.usuarios = data.usuarios;
+
+        this.notificaciones = data.notifications;
+
       },
       (error) => {
-        console.error('Error al obtener usuarios', error);
+        console.error('Error al obtener notificaiones', error);
       }
     );
   }
 
-  cerrar_sesion(): void {
-    localStorage.clear()
-    this.usuarios.splice(0, this.usuarios.length);
-    this.router.navigate(['/auth/login']);
-  }
 
-  desactivar(): void {
+  estado(notificacionEstado: StatusNotification): void {
 
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
@@ -49,64 +42,116 @@ export class ListarComponent {
       },
       buttonsStyling: false
     });
+
+    this.servicio.estado_notificacion(notificacionEstado).subscribe(
+      (data: any) => {
+
+        const notificacion = data.detail;
+        const mensaje_estado = data.notification;
+
+        if (notificacion === 'ok') {
+
+          const index = this.notificaciones.findIndex(n => n.id === notificacionEstado.id);
+
+          if (index !== -1) {
+            this.notificaciones[index].status = notificacionEstado.status;
+          }
+
+        } else if (notificacion === "no") {
+
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: mensaje_estado,
+            footer: '<a href="#">¿Por qué tengo este problema?</a>'
+          });
+        }
+      },
+
+      (error) => {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Hubo un error al intentar desactivar la notificación.",
+        });
+        console.error('Error al eliminar notificación', error);
+      }
+    );
+  }
+
+  eliminar(id: number): void {
+
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: "btn btn-success m-2",
+        cancelButton: "btn btn-danger"
+      },
+      buttonsStyling: false
+    });
+
     swalWithBootstrapButtons.fire({
-      title: "¿Estas seguro que deseas descativar tu usuario?",
-      text: "Si desactivas la cuenta no podras acceder con este usuario!",
+      title: "¿Estás seguro que deseas eliminar la notificación?",
+      text: "Si eliminas la notificación, no podrás acceder nuevamente a esta.",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonText: "si, desactivar!",
+      confirmButtonText: "Sí, eliminar!",
       cancelButtonText: "No, cancelar!",
       reverseButtons: true
     }).then((result) => {
       if (result.isConfirmed) {
 
-        this.servicio.cambiar_estado_usuario().subscribe(
+        this.servicio.elminar_notificacion(id).subscribe(
           (data: any) => {
-            const usuario_activo = data.estado;
-            const mensaje_estado = data.mensaje;
 
-            if (usuario_activo) {
+            const notificacion = data.detail;
+            const mensaje_estado = data.notification;
+
+            if (notificacion === 'ok') {
+
+              this.notificaciones = this.notificaciones.filter(n => n.id !== id);
 
               swalWithBootstrapButtons.fire({
-                title: "Descativada!",
+                title: "Eliminada!",
                 text: mensaje_estado,
                 icon: "success"
-              }).then((result) => {
-                if (result.isConfirmed) {
-                  localStorage.clear();
-                  this.router.navigate(['/auth/login']);
-                }
               });
 
-            } else if (!usuario_activo) {
+            } else if (notificacion === "no") {
               Swal.fire({
                 icon: "error",
                 title: "Oops...",
                 text: mensaje_estado,
-                footer: '<a href="#">Why do I have this issue?</a>'
+                footer: '<a href="#">¿Por qué tengo este problema?</a>'
               });
             }
+          },
+          (error) => {
+            Swal.fire({
+              icon: "error",
+              title: "Error",
+              text: "Hubo un error al intentar eliminar la notificación.",
+            });
+            console.error('Error al eliminar notificación', error);
           }
-        )
+        );
 
-
-      } else if (
-        result.dismiss === Swal.DismissReason.cancel
-      ) {
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
         swalWithBootstrapButtons.fire({
           title: "Cancelado",
-          text: "se ha cancelado el proceso de desactivar usuario :)",
+          text: "Se ha cancelado el proceso de eliminar la notificación.",
           icon: "error"
         });
       }
     });
 
-
-
   }
 
-  redirigirActualizar(usuario: Usuario) {
-    this.router.navigate(['auth/actualizar', usuario]);
+  agregarNotificacion(): void {
+    this.router.navigate(['app/registrar/notificacion']);
   }
+
+  // redirigirActualizar(usuario: Usuario) {
+  //   this.router.navigate(['auth/actualizar', usuario]);
+  // }
 
 }

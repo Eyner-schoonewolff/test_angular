@@ -19,48 +19,55 @@
         </div>
         <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
 
-          <form (ngSubmit)="onSubmit(usuario)" #form="ngForm">
+          <form (ngSubmit)="onSubmit(auth)" #form="ngForm">
             <div class="divider d-flex align-items-center my-4">
               <p class="text-center fw-bold mx-3 mb-0">Login</p>
             </div>
 
             <div class="form-outline mb-4">
-              <input [(ngModel)]="usuario.nombre" type="nombre" name="nombre" required #nombre="ngModel" [formNoValidate]="noWhitespaceValidator()"
-              class="form-control form-control-lg" placeholder="" />
-              <label class="form-label mt-2" for="form3Example3">Nombre</label>
-              <div  *ngIf="form.controls['nombre'].invalid && (form.controls['nombre'].dirty || form.controls['nombre'].touched)">
-                <div *ngIf="form.controls['nombre'].hasError('required')" style="color: red;">El nombre de usuario es obligatorio.</div>
-                <div *ngIf="form.controls['cedula'].hasError('whitespace')" style="color: red;">El npmbre no debe tener espacios en blanco.</div>
+              <input [(ngModel)]="auth.email" type="email" name="email" required #email="ngModel"
+                [ngModelOptions]="{ updateOn: 'blur' }" class="form-control form-control-lg"
+                placeholder="Ingrese su email" />
+              <label class="form-label mt-2" for="form3Example3">Email</label>
 
+              <div *ngIf="email.invalid && (email.dirty || email.touched)">
+                <div *ngIf="email.errors?.['required']" style="color: red;">
+                  El email de usuario es obligatorio.
+                </div>
+                <div *ngIf="email.errors?.['email']" style="color: red;">
+                  El formato de email no es válido.
+                </div>
+                <div *ngIf="email.errors?.['whitespace']" style="color: red;">
+                  El email no debe tener espacios en blanco.
+                </div>
               </div>
             </div>
 
             <div class="form-outline mb-1">
-              <input [(ngModel)]="usuario.cedula" type="text" name="cedula" required #cedula="ngModel" [formNoValidate]="noWhitespaceValidator()"
-                class="form-control form-control-lg" placeholder="" />
-              <label class="form-label mt-2" for="form3Example4">Cedula</label>
-              <div  *ngIf="form.controls['cedula'].invalid && (form.controls['cedula'].dirty || form.controls['cedula'].touched)">
-                <div *ngIf="form.controls['cedula'].hasError('required')" style="color: red;">la cedula es obligatorio.</div>
+              <input [(ngModel)]="auth.password" type="password" name="password" required #password="ngModel"
+                [ngModelOptions]="{ updateOn: 'blur' }" class="form-control form-control-lg"
+                placeholder="Ingrese su contraseña" />
+              <label class="form-label mt-2" for="form3Example4">Contraseña</label>
+
+              <div *ngIf="password.invalid && (password.dirty || password.touched)">
+                <div *ngIf="password.errors?.['required']" style="color: red;">
+                  La contraseña es obligatoria.
+                </div>
               </div>
             </div>
 
             <div class="text-center text-lg-start mt-4 pt-2">
-              <button [disabled]="form.invalid" type="submit" class="btn btn-primary btn-lg"
+              <button [disabled]="email.invalid || password.invalid" type="submit" class="btn btn-primary btn-lg"
                 style="padding-left: 2.5rem; padding-right: 2.5rem;">Login</button>
-              <p class="small fw-bold mt-2 pt-1 mb-0">No tienes cuenta? <a routerLink="/auth/register"
+              <p class="small fw-bold mt-2 pt-1 mb-0">No tienes cuenta? <a routerLink="/app/register"
                   class="link-danger">Register</a></p>
             </div>
           </form>
-
-
         </div>
       </div>
     </div>
     <div
       class="d-flex flex-column flex-md-row text-center text-md-start justify-content-between py-4 px-4 px-xl-5 bg-primary">
-      <div class="text-white mb-3 mb-md-0">
-        Copyright © 2020. All rights reserved.
-      </div>
 
       <div>
         <a href="#!" class="text-white me-4">
