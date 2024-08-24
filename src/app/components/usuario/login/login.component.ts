@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { ServerService } from 'src/app/services/server.service';
+import { ServerService } from 'src/app/components/usuario/services/server.service';
 import { Auth } from './interfaces/usuario';
 import Swal from 'sweetalert2';
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
@@ -21,7 +21,7 @@ export class LoginComponent {
   constructor(private router: Router, private servicio: ServerService) { }
 
   onSubmit(auth: Auth) {
-    this.servicio.UserAuth(auth).subscribe(
+    this.servicio.aunetnticacionUsuario(auth).subscribe(
       (data: any) => {
 
         if (data.auth == "ok") {

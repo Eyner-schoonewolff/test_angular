@@ -20,13 +20,21 @@
                 <div class="form-group">
                   <label for="name"><i class="zmdi zmdi-account material-icons-name"></i></label>
                   <input [(ngModel)]="usuario.name" type="text" name="name" placeholder="Nombre" required
-                    #name="ngModel" />
+                    #name="ngModel" pattern="[a-zA-Z0-9]+" />
+                  <div *ngIf="name.invalid && (name.dirty || name.touched)" class="error-message">
+                    <small *ngIf="name.errors?.['required']">El nombre es obligatorio.</small>
+                    <small *ngIf="name.errors?.['pattern']">El nombre no puede tener espacios en blanco.</small>
+                  </div>
                 </div>
 
                 <div class="form-group">
                   <label for="last_name"><i class="zmdi zmdi-account material-icons-name"></i></label>
                   <input [(ngModel)]="usuario.last_name" type="text" name="last_name" placeholder="Apellido" required
-                    #last_name="ngModel" />
+                    #last_name="ngModel" pattern="[a-zA-Z0-9]+" />
+                  <div *ngIf="last_name.invalid && (last_name.dirty || last_name.touched)" class="error-message">
+                    <small *ngIf="last_name.errors?.['required']">El apellido es obligatorio.</small>
+                    <small *ngIf="last_name.errors?.['pattern']">El apellido no puede tener espacios en blanco.</small>
+                  </div>
                 </div>
               </div>
 
@@ -35,12 +43,19 @@
                   <label for="email"><i class="zmdi zmdi-email"></i></label>
                   <input [(ngModel)]="usuario.email" type="email" name="email" placeholder="Correo electrónico" required
                     #email="ngModel" />
+                  <div *ngIf="email.invalid && (email.dirty || email.touched)" class="error-message">
+                    <small *ngIf="email.errors?.['required']">El correo electrónico es obligatorio.</small>
+                    <small *ngIf="email.errors?.['email']">El correo electrónico debe ser válido.</small>
+                  </div>
                 </div>
 
                 <div class="form-group">
                   <label for="document"><i class="zmdi zmdi-assignment"></i></label>
                   <input [(ngModel)]="usuario.document" type="number" name="document" placeholder="Documento" required
                     #document="ngModel" />
+                  <div *ngIf="document.invalid && (document.dirty || document.touched)" class="error-message">
+                    <small *ngIf="document.errors?.['required']">El documento es obligatorio.</small>
+                  </div>
                 </div>
               </div>
 
@@ -49,14 +64,22 @@
                   <label for="password"><i class="zmdi zmdi-lock"></i></label>
                   <input [(ngModel)]="usuario.password" type="password" name="password" placeholder="Contraseña"
                     required #password="ngModel" />
+                  <div *ngIf="password.invalid && (password.dirty || password.touched)" class="error-message">
+                    <small *ngIf="password.errors?.['required']">La contraseña es obligatoria.</small>
+                  </div>
                 </div>
 
                 <div class="form-group">
-                  <select class="form-control text-center" name="id_rol" [(ngModel)]="usuario.id_rol" required #id_rol="ngModel">
+                  <select class="form-control text-center" name="id_rol" [(ngModel)]="usuario.id_rol" required
+                    #id_rol="ngModel">
+                    <option value="" disabled>Selecciona un rol</option>
                     <option value="1">Admin</option>
                     <option value="2">Gerente</option>
                     <option value="3">Usuario</option>
                   </select>
+                  <div *ngIf="id_rol.invalid && (id_rol.dirty || id_rol.touched)" class="error-message">
+                    <small *ngIf="id_rol.errors?.['required']">El rol es obligatorio.</small>
+                  </div>
                 </div>
               </div>
 
@@ -67,6 +90,9 @@
                 </button>
               </div>
             </form>
+
+
+
           </div>
           <div class="signup-image">
             <figure><img src="../../../assets/signup-image.jpg" alt="sing up image"></figure>

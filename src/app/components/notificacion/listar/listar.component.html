@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+</head>
+
+<body>
+
+  <app-nvar></app-nvar>
+
+  <main class="container">
+    <div class="row mt-5">
+      <div class="position-relative d-flex align-items-center" style="margin: -2rem;">
+        <button (click)="agregarNotificacion()" type="button" class="btn btn-success btn-sm me-2">
+          <i class="bi bi-plus-lg"></i> Agregar Notificación
+        </button>
+        <button *ngIf="notificaciones.length > 0;"
+          (click)="activarTodasLasNotificaciones({ 'user_id': estadoNotificaciones.user_id, 'status': estadoNotificaciones.status === 1 ? 2 : 1 })"
+          type="button" class="btn btn-primary btn-sm">
+          <i class="bi bi-toggle-{{ estadoNotificaciones.status === 1 ? 'off' : 'on' }}"></i>
+          {{ estadoNotificaciones.status === 1 ? 'Desactivar' : 'Activar' }}
+        </button>
+      </div>
+
+      <!-- Filtro por fecha -->
+      <div class="row mb-4 mt-5">
+        <div class="col-md-12 d-flex justify-content-center">
+          <div class="input-group datepicker-container">
+            <label for="filterDate" class="form-label me-2">Filtrar por Fecha:</label>
+            <input type="date" id="filterDate" class="form-control" (change)="onDateChange($event)">
+            <button class="btn btn-secondary" type="button">
+              <i class="fas fa-calendar-alt"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <ng-container *ngIf="notificaciones.length > 0; else noNotifications">
+        <div class="row mt-5">
+          <div class="col-md-6" *ngFor="let notificacion of notificaciones">
+            <div
+              class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-lg h-md-250 position-relative card-custom">
+              <div class="col p-4 d-flex flex-column position-static">
+                <strong class="d-inline-block mb-2 mt-1 text-primary-emphasis">Título:</strong>
+                <h3 class="mt-3">{{ notificacion.title }}</h3>
+                <div class="mb-1 text-body-secondary">ID: {{ notificacion.id }}</div>
+                <p class="card-text mb-auto">Descripción: {{ notificacion.description }}</p>
+                <div class="container">
+                  <div class="row">
+                    <div class="col-md-4">
+                      <button (click)="eliminar(notificacion.id)" type="button" class="btn btn-danger btn-custom mb-2"
+                        title="Eliminar">
+                        <i class="bi bi-trash"></i>
+                        Eliminar
+                      </button>
+                    </div>
+                    <div class="col-md-4">
+                      <button (click)="estado({'id':notificacion.id,'status':notificacion.status === 1 ? 2 : 1})"
+                        type="button" class="btn btn-primary btn-custom mb-2"
+                        title="{{ notificacion.status === 1 ? '✗ Desactivar' : '✓ Activar' }}">
+                        <i class="bi bi-toggle-{{ notificacion.status === 1 ? 'on' : 'off' }}"></i>
+                        {{ notificacion.status === 1 ? 'Desactivar' : 'Activar' }}
+                      </button>
+                    </div>
+                    <div class="col-md-4">
+                      <button (click)="verNotificacion(notificacion.id)" type="button"
+                        class="btn btn-info btn-custom mb-2" title="Ver notificacion">
+                        <i class="bi bi-eye"></i>
+                        Notificación
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-auto d-none d-lg-block">
+                <svg class="bd-placeholder-img" width="200" height="280" xmlns="http://www.w3.org/2000/svg" role="img"
+                  aria-label="Estado" preserveAspectRatio="xMidYMid slice" focusable="false">
+                  <rect width="100%" height="100%" [attr.fill]="getBackgroundColor(notificacion.status)" />
+                  <text x="50%" y="50%" fill="#ffffff" dy=".3em" text-anchor="middle" font-size="1.5em">
+                    {{ notificacion.status === 1 ? '✓ Activado' : '✗ Desactivado' }}
+                  </text>
+                </svg>
+              </div>
+              <!-- Añadido el footer -->
+              <div class="card-footer text-muted">
+                Fecha de Creación: {{ notificacion.creation_date | date:'short' }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-template #noNotifications>
+        <div class="col-md-12 text-center">
+          <div class="alert alert-info mt-5" role="alert">
+            <h4 class="alert-heading">No hay notificaciones disponibles</h4>
+            <p>Parece que no tienes ninguna notificación en este momento. Puedes agregar una nueva notificación usando
+              el botón para Agregar Notificaciones.</p>
+            <hr>
+          </div>
+        </div>
+      </ng-template>
+    </div>
+  </main>
+
+
+
+  <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="notificationModalLabel">Detalles de Notificación</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="modal-section">
+            <h6 class="modal-subtitle">Título</h6>
+            <p class="modal-text">{{ notificacion.title }}</p>
+          </div>
+          <div class="modal-section">
+            <h6 class="modal-subtitle">Descripción</h6>
+            <p class="modal-text">{{ notificacion.description }}</p>
+          </div>
+          <div class="modal-section">
+            <h6 class="modal-subtitle">Estado</h6>
+            <p>
+              <span
+                [ngClass]="{'badge': true, 'bg-success': notificacion.status === 1, 'bg-danger': notificacion.status === 2}">
+                {{ notificacion.status === 1 ? 'Activo' : 'Inactivo' }}
+              </span>
+            </p>
+          </div>
+          <div class="modal-section">
+            <h6 class="modal-subtitle">Fecha de Creación</h6>
+            <p class="modal-text">{{ notificacion.creation_date | date:'short' }}</p>
+          </div>
+          <div class="modal-section">
+            <h6 class="modal-subtitle">Usuario</h6>
+            <p class="modal-text">{{ notificacion.user_name }} {{ notificacion.user_last_name }}</p>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+</body>
+
+</html>

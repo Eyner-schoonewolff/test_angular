@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { ServerService } from 'src/app/services/server.service';
 import { RegistrarUsuario } from './interfaces/registrar';
 import Swal from 'sweetalert2';
+import { ServerService } from '../services/server.service';
 
 
 @Component({
@@ -25,7 +25,7 @@ export class RegistrarComponent {
 
   onSubmit(usuario: RegistrarUsuario) {
 
-    this.servicio.Crear_usario(usuario).subscribe(
+    this.servicio.registrarUsuario(usuario).subscribe(
       (data: any) => {
 
         const userResponse = data.response;
@@ -86,6 +86,8 @@ export class RegistrarComponent {
     )
 
   }
+
+
 
 
 }

@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Notification } from './interfaces/notificacion';
-import { ServerService } from 'src/app/services/server.service';
+import { ServicioNotificaion } from '../services/servicio.service';
 import Swal from 'sweetalert2';
-import { throwError } from 'rxjs';
 
 
 @Component({
@@ -19,12 +18,12 @@ export class RegistrarNotificacionComponent {
     description: ''
   }
 
-  constructor(private router: Router, private servicio: ServerService) {
+  constructor(private router: Router, private servicio: ServicioNotificaion) {
 
   }
 
   onSubmit(notificacion: Notification) {
-    this.servicio.Registrar_notificacion(notificacion).subscribe(
+    this.servicio.registrarNotificacion(notificacion).subscribe(
 
       (data: any,) => {
 

@@ -5,14 +5,20 @@ export interface Notification {
     description: string,
     status: number,
     deleted: number,
-    deleted_date: Date,
-    creation_date: Date,
+    deleted_date: string,
+    creation_date: string,
     user_name: string,
     user_last_name: string
 }
 
 
 export interface StatusNotification {
-    id:number,
-    status:number
+    id: number,
+    status: number
 }
+
+export interface ActivarEstadosNotificationes {
+    user_id: string | null,
+    status: number
+}
+
