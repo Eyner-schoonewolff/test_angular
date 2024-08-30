@@ -22,10 +22,10 @@ export class ServerService {
 
     return this.http.post(this.URI + '/user/auth', { email, password }).pipe(
       catchError((error: HttpErrorResponse) => {
-        if (error.status === 401) {
+        if (error.status === 400) {
           return throwError(error);
         } else if (error.status === 404) {
-          return throwError('Recurso no encontrado');
+          return throwError(error);
         } else {
           return throwError('Error desconocido');
         }
