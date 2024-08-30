@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Auth } from '../login/interfaces/usuario';
 import { RegistrarUsuario } from '../registrar-usuario/interfaces/registrar';
 import { catchError, throwError } from 'rxjs';
-
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +12,7 @@ export class ServerService {
   constructor(private http: HttpClient) {
   }
 
-  URI: any = "http://127.0.0.1:8000/api/v1";
+  URI: string = environment.apiURL;
 
   users: Auth[] = []
 
@@ -55,7 +55,7 @@ export class ServerService {
     )
   }
 
-  
+
 
 
 }

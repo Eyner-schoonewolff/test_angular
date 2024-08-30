@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { catchError, throwError } from 'rxjs';
 import { ActivarEstadosNotificationes, Notification, StatusNotification } from '../listar/interfaces/notificacion';
 import { Notification as RegistrarNotificaion } from '../registrar-notification/interfaces/notificacion';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -12,8 +13,7 @@ export class ServicioNotificaion {
   constructor(private http: HttpClient) {
   }
 
-  URI: any = "http://127.0.0.1:8000/api/v1";
-
+  URI: string = environment.apiURL;
 
   private getToken(): string | null {
     return localStorage.getItem('token');
